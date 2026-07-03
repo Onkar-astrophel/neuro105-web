@@ -1,0 +1,118 @@
+:root {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --panel-2: #eceef2;
+  --border: #dde1e8;
+  --fg: #1b1e27;
+  --fg-muted: #5b6072;
+  --accent: #0077b6;
+  --accent-2: #00b4d8;
+  --good: #1e8e5a;
+  --bad: #d1453b;
+  --warn: #b8860b;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --shadow: 0 1px 2px rgba(20, 21, 26, 0.06), 0 4px 16px rgba(20, 21, 26, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14151a;
+    --panel: #1e1f26;
+    --panel-2: #262833;
+    --border: #33364230;
+    --border: #34384a;
+    --fg: #e8e8ec;
+    --fg-muted: #9aa0b0;
+    --accent: #00b4d8;
+    --accent-2: #48cae4;
+    --good: #4fd693;
+    --bad: #ff6b6b;
+    --warn: #ffd166;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #14151a;
+  --panel: #1e1f26;
+  --panel-2: #262833;
+  --border: #34384a;
+  --fg: #e8e8ec;
+  --fg-muted: #9aa0b0;
+  --accent: #00b4d8;
+  --accent-2: #48cae4;
+  --good: #4fd693;
+  --bad: #ff6b6b;
+  --warn: #ffd166;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="light"] {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --panel-2: #eceef2;
+  --border: #dde1e8;
+  --fg: #1b1e27;
+  --fg-muted: #5b6072;
+  --accent: #0077b6;
+  --accent-2: #00b4d8;
+  --good: #1e8e5a;
+  --bad: #d1453b;
+  --warn: #b8860b;
+  --shadow: 0 1px 2px rgba(20, 21, 26, 0.06), 0 4px 16px rgba(20, 21, 26, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+select {
+  font-family: inherit;
+  color-scheme: light dark;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

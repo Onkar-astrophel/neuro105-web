@@ -1,0 +1,35 @@
+{
+  "rules": {
+    "neuro105": {
+      ".read": "auth != null",
+      "live": {
+        ".write": "auth != null"
+      },
+      "params": {
+        ".write": "auth != null"
+      },
+      "profile": {
+        ".write": "auth != null"
+      },
+      "program": {
+        ".write": "auth != null"
+      },
+      "status": {
+        ".write": "auth != null"
+      },
+      "commands": {
+        ".write": "auth != null",
+        "$cmdId": {
+          ".validate": "newData.hasChild('type') || !newData.exists()"
+        }
+      },
+      "ack": {
+        ".write": "auth != null"
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
