@@ -15,26 +15,27 @@ export function ParamTable({ title, specs }: { title: string; specs: RegSpec[] }
   const { data: params } = useRtdbValue<ParamsBlob>("/neuro105/params");
   const { data: live } = useRtdbValue<{ resFactor?: number }>("/neuro105/live");
   const [edits, setEdits] = useState<Record<number, string>>({});
+  const [dirty, setDirty] = useState<Record<number, boolean>>({});
   const [pending, setPending] = useState<Record<number, boolean>>({});
   const [refreshing, setRefreshing] = useState(false);
   const resFactor = live?.resFactor ?? 1;
 
   useEffect(() => {
-    // seed the edit boxes from the last known param values whenever a fresh
-    // read_all lands, but don't clobber a value the user is mid-typing.
+    // Reseed every field from the latest params blob whenever a fresh
+    // read_all lands (params.ts changes), except fields the user is
+    // currently mid-typing (tracked via `dirty`, reset once they Write).
     if (!params) return;
     setEdits((prev) => {
       const next = { ...prev };
       for (const spec of specs) {
-        if (next[spec.addr] === undefined) {
-          const raw = params[String(spec.addr)];
-          if (raw !== undefined) next[spec.addr] = rawToDisplay(spec, raw, resFactor);
-        }
+        if (dirty[spec.addr]) continue;
+        const raw = params[String(spec.addr)];
+        if (raw !== undefined) next[spec.addr] = rawToDisplay(spec, raw, resFactor);
       }
       return next;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params, params?.ts]);
 
   async function readAll() {
     setRefreshing(true);
@@ -49,6 +50,7 @@ export function ParamTable({ title, specs }: { title: string; specs: RegSpec[] }
     try {
       const raw = displayToRaw(spec, text, resFactor);
       await writeRegister(spec.addr, raw);
+      setDirty((d) => ({ ...d, [spec.addr]: false }));
     } finally {
       setPending((p) => ({ ...p, [spec.addr]: false }));
     }
@@ -85,12 +87,13 @@ export function ParamTable({ title, specs }: { title: string; specs: RegSpec[] }
                   {spec.enum ? (
                     <select
                       value={edits[spec.addr]?.split(":")[0]?.trim() ?? ""}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setEdits((p) => ({
                           ...p,
                           [spec.addr]: `${e.target.value} : ${spec.enum![Number(e.target.value)]}`,
-                        }))
-                      }
+                        }));
+                        setDirty((d) => ({ ...d, [spec.addr]: true }));
+                      }}
                       style={{
                         width: "100%",
                         background: "var(--panel)",
@@ -113,7 +116,10 @@ export function ParamTable({ title, specs }: { title: string; specs: RegSpec[] }
                   ) : (
                     <Input
                       value={edits[spec.addr] ?? ""}
-                      onChange={(v) => setEdits((p) => ({ ...p, [spec.addr]: v }))}
+                      onChange={(v) => {
+                        setEdits((p) => ({ ...p, [spec.addr]: v }));
+                        setDirty((d) => ({ ...d, [spec.addr]: true }));
+                      }}
                       readOnly={spec.ro}
                     />
                   )}
