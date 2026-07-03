@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { LoginGate } from "@/components/LoginGate";
 import { StatusHeader } from "@/components/StatusHeader";
 import { Tabs } from "@/components/Tabs";
@@ -35,3 +37,4 @@ export default function Home() {
     </LoginGate>
   );
 }
+ 

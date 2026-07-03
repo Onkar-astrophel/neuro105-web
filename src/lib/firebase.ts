@@ -16,6 +16,17 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-export const db = getDatabase(app);
-export const auth = getAuth(app);
+const hasConfig = !!firebaseConfig.databaseURL && !!firebaseConfig.projectId;
+
+export const app = hasConfig
+  ? getApps().length
+    ? getApp()
+    : initializeApp(firebaseConfig)
+  : undefined;
+
+// db/auth are only used from client components (after LoginGate), by which
+// point NEXT_PUBLIC_* vars are always present in the browser bundle. The
+// `undefined` fallback only matters for server-side prerendering (e.g.
+// Next's /_not-found page), where these are imported but never called.
+export const db = app ? getDatabase(app) : (undefined as unknown as ReturnType<typeof getDatabase>);
+export const auth = app ? getAuth(app) : (undefined as unknown as ReturnType<typeof getAuth>);
