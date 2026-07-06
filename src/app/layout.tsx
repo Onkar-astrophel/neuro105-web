@@ -3,7 +3,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Neuro 105 — Remote Dashboard",
+  title: "Oven Remote Dashboard",
   description: "Live monitoring & configuration for the PPI Neuro 105 oven controller",
 };
 
